@@ -1,0 +1,13 @@
+[
+  {
+    "name": "WhatEnchant",
+    "modid": "whatenchant",
+    "description": "Quickly see the enchant on a tool/weapon",
+    "version": "1.0",
+    "mcversion": "1.8.9",
+    "url": "https://github.com/PyICoder/WhatEnchant",
+    "authorList": ["Befell"],
+    "logoFile": "assets/rewardclaim/textures/banner.png",
+    "credits": "Cow"
+  }
+]
