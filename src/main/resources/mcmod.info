@@ -1,13 +1,13 @@
 [
   {
-    "name": "WhatEnchant",
-    "modid": "whatenchant",
-    "description": "Quickly see the enchant on a tool/weapon",
+    "name": "WhatTier",
+    "modid": "whattier",
+    "description": "Quickly see the tier of a tool/weapon/potion",
     "version": "1.0",
     "mcversion": "1.8.9",
-    "url": "https://github.com/PyICoder/WhatEnchant",
+    "url": "https://github.com/PyICoder/WhatTier/releases",
     "authorList": ["Befell"],
-    "logoFile": "assets/rewardclaim/textures/banner.png",
-    "credits": "Cow"
+    "logoFile": "",
+    "credits": "Cow, people who helped with my coding."
   }
 ]

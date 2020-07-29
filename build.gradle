@@ -9,13 +9,14 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "1.0"
-group = "me.befell.whatenchant // http://maven.apache.org/guides/mini/guide-naming-conventions.html"
-archivesBaseName = "whatenchant"
+group = "me.befell.whattier"
+archivesBaseName = "whattier"
 sourceCompatibility = targetCompatibility = 1.8
 
 minecraft {
