@@ -33,9 +33,9 @@ public class UpdateChecker {
                     Minecraft.getMinecraft().thePlayer
                             .addChatMessage(new ChatComponentText("Click here to download")
                                     .setChatStyle(new ChatStyle()
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("https://github.com/PyICoder/WhatLevel/releases/latest")))
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("https://github.com/PyICoder/WhatTier/releases/latest")))
                                     .setBold(true).setColor(EnumChatFormatting.GOLD)
-                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/PyICoder/WhatLevel/releases/latest"))));
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/PyICoder/WhatTier/releases/latest"))));
 
 
                 }
@@ -47,7 +47,7 @@ public class UpdateChecker {
 
     public static String CheckUpdate() {
         try {
-            URL url = new URL("https://raw.githubusercontent.com/PyICoder/WhatLevel/master/version.txt");
+            URL url = new URL("https://raw.githubusercontent.com/PyICoder/WhatTier/master/version.txt");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setUseCaches(true);
             connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36");
