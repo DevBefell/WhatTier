@@ -1,1 +1,2 @@
+1.1 Fixed text rendering behind the item, added changelog.
 1.0 Inital release.
