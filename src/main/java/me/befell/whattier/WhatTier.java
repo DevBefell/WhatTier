@@ -7,10 +7,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
-
 @Mod(name = "WhatTier", modid = WhatTier.MODID, version = WhatTier.VERSION, clientSideOnly = true)
 public class WhatTier {
     public static final String MODID = "whattier";
