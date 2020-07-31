@@ -18,7 +18,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.TreeMap;
 
 public class Main {
@@ -103,8 +103,7 @@ public class Main {
 
     @SubscribeEvent
     public void onRenderGuiBackground(GuiScreenEvent.DrawScreenEvent.Pre e) {
-        if (ShouldRun()) {
-            if (e.gui instanceof GuiContainer) {
+        if (ShouldRun() && e.gui instanceof GuiContainer) {
                 GuiContainer guiContainer = (GuiContainer) e.gui;
                 Container inventorySlots = guiContainer.inventorySlots;
                 IInventory inventory = inventorySlots.getSlot(0).inventory;
@@ -117,7 +116,7 @@ public class Main {
                 int guiTop = xy.getSecond();
                 GlStateManager.pushMatrix();
                 float scaleFactor = 0.7f;
-                GlStateManager.translate(0, 0, 1);
+                GlStateManager.translate(0, 0, 260);
                 GlStateManager.scale(scaleFactor, scaleFactor, 0);
                 for (Slot inventorySlot : inventorySlots.inventorySlots) {
                     if (inventorySlot.getHasStack()) {
@@ -125,7 +124,7 @@ public class Main {
                     }
                 }
                 GlStateManager.popMatrix();
-            }
+
         }
     }
 

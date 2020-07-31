@@ -7,11 +7,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
-@Mod(name = "WhatTier",modid = WhatTier.MODID, version = WhatTier.VERSION, clientSideOnly = true)
+
+@Mod(name = "WhatTier", modid = WhatTier.MODID, version = WhatTier.VERSION, clientSideOnly = true)
 public class WhatTier {
     public static final String MODID = "whattier";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
