@@ -105,7 +105,7 @@ public class Events {
             if (!version.equals(WhatTier.VERSION)) {
                 breakline();
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76There is an update for WhatTier!"));
-                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Your Current version is  The newest one is " + version));
+                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Your Current version is " + WhatTier.VERSION + " The newest one is " + version));
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Changelog: " + changelog));
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76\u00a7n\u00a7lClick here to download")
                         .setChatStyle(new ChatStyle()
