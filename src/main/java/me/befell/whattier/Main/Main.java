@@ -1,5 +1,7 @@
 package me.befell.whattier.Main;
 
+import me.befell.whattier.Utils.Utils;
+import me.befell.whattier.WhatTier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiHopper;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,77 +13,43 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemPotion;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.awt.*;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
+
+import static me.befell.whattier.Utils.Utils.toRoman;
 
 public class Main {
-    public static boolean ShouldRun() {
-        String title;
-        try {
-            title = EnumChatFormatting.getTextWithoutFormattingCodes(Minecraft.getMinecraft().theWorld.getScoreboard().getObjectiveInDisplaySlot(1).getDisplayName());
-        }catch (Exception ignored){return true;}
-        // Can add games to exclude.
-        if (title.toLowerCase().equals("skyblock")) {
-            return false;
-        }
-        return true;
-    }
-
-    // https://stackoverflow.com/a/2832629/10565413
-    static final class IntPair {
-        private final int first;
-        private final int second;
-
-        public IntPair(int first, int second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        public int getFirst() {
-            return first;
-        }
-
-        public int getSecond() {
-            return second;
-        }
-    }
-
-    private final static TreeMap<Integer, String> map = new TreeMap<>();
+    private final Configuration cfg;
+    private final ConfigCategory cfgclient;
+    private final ConfigCategory cfgcolor;
+    private final static Map<Integer, String> values = new HashMap<>();
 
     static {
-        map.put(1000, "M");
-        map.put(900, "CM");
-        map.put(500, "D");
-        map.put(400, "CD");
-        map.put(100, "C");
-        map.put(90, "XC");
-        map.put(50, "L");
-        map.put(40, "XL");
-        map.put(10, "X");
-        map.put(9, "IX");
-        map.put(5, "V");
-        map.put(4, "IV");
-        map.put(1, "I");
-
+        values.put(50, "flameColor");
+        values.put(20, "fireAspect");
+        values.put(0, "protColor");
+        values.put(16, "sharpColor");
+        values.put(48, "powerColor");
+        values.put(51, "infinityColor");
+        values.put(19, "knockbackColor");
     }
 
-    public static String toRoman(int number) {
-        int l = map.floorKey(number);
-        if (number == l) {
-            return map.get(number);
-        }
-        return map.get(l) + toRoman(number - l);
+    public Main(WhatTier mod) {
+        cfg = mod.getConfig().getConfig();
+        cfgclient = cfg.getCategory("client");
+        cfgcolor = cfg.getCategory("color");
+
     }
 
     // Thanks to Cow https://github.com/cow-mc
-    private static IntPair size(GuiScreen gui, IInventory inventory) {
+    private Utils.IntPair size(GuiScreen gui, IInventory inventory) {
         int xSize = 176;
         int ySize = 166;
         if (gui instanceof GuiContainerCreative) {
@@ -98,40 +66,90 @@ public class Main {
         }
         int guiLeft = (gui.width - xSize) / 2;
         int guiTop = (gui.height - ySize) / 2;
-        return new IntPair(guiLeft, guiTop);
+        switch (cfgclient.get("location").getString()) {
+            case "top left": {
+                break;
+            }
+
+            case "top center": {
+                guiLeft = guiLeft + 6;
+                break;
+            }
+
+            case "top right": {
+                guiLeft = guiLeft + 12;
+                break;
+            }
+
+            case "center left": {
+                guiTop = guiTop + 5;
+                break;
+            }
+
+            case "center": {
+                guiTop = guiTop + 5;
+                guiLeft = guiLeft + 6;
+                break;
+            }
+
+            case "center right": {
+                guiTop = guiTop + 5;
+                guiLeft = guiLeft + 12;
+                break;
+            }
+
+            case "bottom left": {
+                guiTop = guiTop + 10;
+                break;
+            }
+
+            case "bottom center": {
+                guiTop = guiTop + 10;
+                guiLeft = guiLeft + 6;
+                break;
+            }
+
+            case "bottom right": {
+                guiTop = guiTop + 10;
+                guiLeft = guiLeft + 12;
+                break;
+            }
+
+        }
+        return new Utils.IntPair(guiLeft, guiTop);
     }
 
     @SubscribeEvent
     public void onRenderGuiBackground(GuiScreenEvent.DrawScreenEvent.Pre e) {
-        if (ShouldRun() && e.gui instanceof GuiContainer) {
-                GuiContainer guiContainer = (GuiContainer) e.gui;
-                Container inventorySlots = guiContainer.inventorySlots;
-                IInventory inventory = inventorySlots.getSlot(0).inventory;
-                // For Skywars kit selector gui, can add others.
-                if (inventory.getName().toLowerCase().equals("kit selector")){
-                    return;
+        if (e.gui instanceof GuiContainer) {
+            GuiContainer guiContainer = (GuiContainer) e.gui;
+            Container inventorySlots = guiContainer.inventorySlots;
+            IInventory inventory = inventorySlots.getSlot(0).inventory;
+            // For Skywars kit selector gui, can add others.
+            if (inventory.getName().toLowerCase().equals("kit selector")) {
+                return;
+            }
+            Utils.IntPair xy = size(guiContainer, inventory);
+            int guiLeft = xy.getFirst();
+            int guiTop = xy.getSecond();
+            GlStateManager.pushMatrix();
+            float scaleFactor = Float.parseFloat(cfgclient.get("size").getString());
+            GlStateManager.translate(0, 0, 260);
+            GlStateManager.scale(scaleFactor, scaleFactor, 0);
+            for (Slot inventorySlot : inventorySlots.inventorySlots) {
+                if (inventorySlot.getHasStack()) {
+                    renderEnchant(inventorySlot.getStack(), guiLeft, guiTop, inventorySlot);
                 }
-                IntPair xy = size(guiContainer, inventory);
-                int guiLeft = xy.getFirst();
-                int guiTop = xy.getSecond();
-                GlStateManager.pushMatrix();
-                float scaleFactor = 0.7f;
-                GlStateManager.translate(0, 0, 260);
-                GlStateManager.scale(scaleFactor, scaleFactor, 0);
-                for (Slot inventorySlot : inventorySlots.inventorySlots) {
-                    if (inventorySlot.getHasStack()) {
-                        renderEnchant(inventorySlot.getStack(), guiLeft, guiTop, inventorySlot);
-                    }
-                }
-                GlStateManager.popMatrix();
+            }
+            GlStateManager.popMatrix();
 
         }
     }
 
     private void renderEnchant(ItemStack item, int guiLeft, int guiTop, Slot inventorySlot) {
-        float scaleFactor = 0.7f;
+        float scaleFactor = Float.parseFloat(cfgclient.get("size").getString());
         String status = "";
-        Color color = new Color(255, 255, 255, 255);
+        int color = cfgcolor.get("globalColor").getInt();
         if (item.getItem() instanceof ItemPotion) {
             ItemPotion itempotion = (ItemPotion) item.getItem();
             String[] potionstat;
@@ -146,7 +164,8 @@ public class Main {
             } catch (NumberFormatException ignored) {
             }
 
-            status = toRoman(num);
+            status = cfgclient.get("isRoman").getString().equals("enabled") ? toRoman(num) : "" + num;
+            ;
 
         } else {
             NBTTagList itemEnchant = item.getEnchantmentTagList();
@@ -154,35 +173,131 @@ public class Main {
                 return;
             } else {
                 for (int j = 0; j < itemEnchant.tagCount(); ++j) {
-                    short id = itemEnchant.getCompoundTagAt(j).getShort("id");
-                    short num = itemEnchant.getCompoundTagAt(j).getShort("lvl");
-                    // sharpness, power, protection, efficiency
-                    if (id == 16 || id == 48 || id == 0 || id == 32) {
-                        status = toRoman(num);
-                    }
-                    // fire aspect, flame
-                    if (id == 20 || id == 50) {
-                        if (status.equals("")){
-                            status = "N";
+                    int id = itemEnchant.getCompoundTagAt(j).getInteger("id");
+                    int num = itemEnchant.getCompoundTagAt(j).getInteger("lvl");
+                    if (values.containsKey(id)) {
+                        switch (values.get(id)) {
+                            case "protColor": {
+                                if (cfgclient.get("itemSpecific").getString().equals("enabled") && !(item.getItem() instanceof ItemArmor)) {
+                                    return;
+                                }
+                                break;
+                            }
+                            case "knockbackColor":
+                            case "sharpColor":
+                            case "fireAspect": {
+                                if (cfgclient.get("itemSpecific").getString().equals("enabled")) {
+                                    if (!(item.getItem() instanceof ItemSword)) {
+                                        return;
+                                    }
+                                }
+                                break;
+                            }
+                            case "powerColor": {
+                                if (cfgclient.get("itemSpecific").getString().equals("enabled") && !(item.getItem() instanceof ItemBow)) {
+                                    return;
+                                }
+                                break;
+                            }
                         }
-                        // fire aspect 2 is hotter
-                        if (id == 20 && num > 1) {
-                            color = new Color(255, 7, 57, 255);
-                        } else {
-                            color = new Color(255, 157, 0, 255);
+                        switch (values.get(id)) {
+                            case "fireAspect": {
+                                if (itemEnchant.getCompoundTagAt(j).getInteger("lvl") > 1) {
+                                    if (!cfgcolor.get("fireTwoColor").getString().equals("off") &&
+                                            !cfgcolor.get("fireTwoColor").getString().equals("global")) {
+                                        try {
+                                            color = cfgcolor.get("fireTwoColor").getInt();
+                                        } catch (Exception ignored) {
+                                        }
+                                    }
+                                } else {
+                                    if (!cfgcolor.get("fireOneColor").getString().equals("off") &&
+                                            !cfgcolor.get("fireOneColor").getString().equals("global")) {
+                                        try {
+                                            color = cfgcolor.get("fireOneColor").getInt();
+                                        } catch (Exception ignored) {
+                                        }
+                                    }
+                                }
+                                if (status.equals("")) {
+                                    status = "N";
+                                }
+                                break;
+                            }
+                            case "flameColor": {
+                                if (!cfgcolor.get("flameColor").getString().equals("off") &&
+                                        !cfgcolor.get("flameColor").getString().equals("global")) {
+                                    try {
+                                        color = cfgcolor.get("flameColor").getInt();
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                                if (status.equals("")) {
+                                    status = "N";
+                                }
+                                break;
+                            }
+                            case "knockbackColor": {
+                                if (!cfgcolor.get("knockbackColor").getString().equals("off") &&
+                                        !cfgcolor.get("knockbackColor").getString().equals("global")) {
+                                    try {
+                                        color = cfgcolor.get("knockbackColor").getInt();
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                                if (status.equals("")) {
+                                    status = "N";
+                                }
+                                break;
+                            }
+                            case "infinityColor": {
+                                if (!cfgcolor.get("infinityColor").getString().equals("off") &&
+                                        !cfgcolor.get("infinityColor").getString().equals("global")) {
+                                    color = cfgcolor.get("infinityColor").getInt();
+                                }
+                                if (status.equals("")) {
+                                    status = "N";
+                                }
+                                break;
+                            }
+                            default: {
+                                if (cfgcolor.get(values.get(id)).getString().equals("off")) {
+                                    break;
+                                }
+                                if (!cfgcolor.get(values.get(id)).getString().equals("global") &&
+                                        !(color == cfgcolor.get("fireTwoColor").getInt()) &&
+                                        !(color == cfgcolor.get("fireOneColor").getInt())) {
+                                    try {
+                                        color = cfgcolor.get(values.get(id)).getInt();
+                                    } catch (Exception ignored) {
+                                        color = cfgcolor.get("globalColor").getInt();
+                                    }
+                                }
+                                status = cfgclient.get("isRoman").getString().equals("enabled") ? toRoman(num) : "" + num;
+                                break;
+                            }
                         }
                     }
-
                 }
             }
         }
-        if (status.equals("")){
+        if (status.equals("")) {
             return;
         }
+        if (cfgclient.get("location").getString().contains(" center") || cfgclient.get("location").getString().equals("center")) {
+            if (status.length() > 1 || status.contains("V") || status.equals("N")) {
+                guiLeft = guiLeft - ((status.length() > 1) ? status.length() - 2 : status.length());
+            }
+        } else if (cfgclient.get("location").getString().contains("right")) {
+            if (status.length() > 1 || status.contains("V") || status.contains("N")) {
+                guiLeft = guiLeft - ((status.length() > 2) ? status.length() + 2 : status.length());
+            }
+        }
+
 
         int x = (int) ((guiLeft + inventorySlot.xDisplayPosition) / scaleFactor + 1);
         int y = (int) ((guiTop + inventorySlot.yDisplayPosition) / scaleFactor) + 1;
 
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(status, x, y, color.getRGB());
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(status, x, y, color);
     }
 }

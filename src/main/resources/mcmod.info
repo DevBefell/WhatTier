@@ -3,7 +3,7 @@
     "name": "WhatTier",
     "modid": "whattier",
     "description": "Quickly see the tier of a tool/weapon/potion",
-    "version": "1.1",
+    "version": "1.5",
     "mcversion": "1.8.9",
     "url": "https://github.com/PyICoder/WhatTier/releases",
     "authorList": ["Befell"],
