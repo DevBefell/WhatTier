@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 
 public class Events {
@@ -30,6 +29,7 @@ public class Events {
     private WhatTier mod;
     private Logger logger;
     private String isenabled;
+    private boolean registed = false;
 
     final static Minecraft mc = Minecraft.getMinecraft();
     static String version = WhatTier.VERSION;
@@ -39,11 +39,10 @@ public class Events {
     public Events(WhatTier mod) {
         this.mod = mod;
         logger = mod.getLogger();
-        isenabled = mod.getConfig().getConfig().getCategory("client").get("isEnabled").getString();
     }
 
     public boolean ShouldRun() {
-        if (isenabled.equals("disabled")) {
+        if (mod.getConfig().getConfig().getCategory("client").get("isEnabled").getString().equals("disabled")) {
             return false;
         }
         String title;
@@ -64,10 +63,12 @@ public class Events {
     public void onJoinWorld(PlayerSetSpawnEvent e) {
         new Utils().Delay(() -> {
             if (e.entity.getName().equals(mc.thePlayer.getName())) {
-                if (ShouldRun()) {
+                if (ShouldRun() && !registed) {
                     logger.info("Registering");
+                    registed = true;
                     MinecraftForge.EVENT_BUS.register(new Main(mod));
-                } else {
+                } else if (!ShouldRun() && registed) {
+                    registed = false;
                     logger.info("Unregistering");
                     MinecraftForge.EVENT_BUS.unregister(new Main(mod));
                 }
@@ -107,12 +108,12 @@ public class Events {
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76There is an update for WhatTier!"));
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Your Current version is  " + WhatTier.VERSION + " The newest one is " + version));
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76 Changelog: "));
-                if (changelog.contains("/n")){
+                if (changelog.contains("/n")) {
                     String[] lines = changelog.split("/n");
-                    for (String line : lines){
+                    for (String line : lines) {
                         mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76" + line));
                     }
-                }else {
+                } else {
                     mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76" + changelog));
 
                 }
