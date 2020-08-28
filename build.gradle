@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.5"
+version = "1.5.1"
 group = "me.befell.whattier"
 archivesBaseName = "WhatTier"
 sourceCompatibility = targetCompatibility = 1.8
@@ -25,6 +25,7 @@ minecraft {
     mappings = "stable_20"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
+
 processResources
         {
             inputs.property "version", project.version
