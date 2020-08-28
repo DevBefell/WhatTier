@@ -150,7 +150,7 @@ public class Main {
         float scaleFactor = Float.parseFloat(cfgclient.get("size").getString());
         String status = "";
         int color = cfgcolor.get("globalColor").getInt();
-        if (item.getItem() instanceof ItemPotion) {
+        if (item.getItem() instanceof ItemPotion && cfgclient.get("enablePotion").getString().equals("enabled")) {
             ItemPotion itempotion = (ItemPotion) item.getItem();
             String[] potionstat;
             try {

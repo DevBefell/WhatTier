@@ -74,11 +74,11 @@ public class WTConfig {
         Property pProtColor = cfg.get("color",
                 "protColor", "global", "Color for Protection, off to not show, global for global color");
         Property pFireOneColor = cfg.get("color",
-                "fireOneColor","" + new Color(255, 157, 0).getRGB(), " Color for fire aspect one, off to not show, global for global color");
+                "fireOneColor", "" + new Color(255, 157, 0).getRGB(), " Color for fire aspect one, off to not show, global for global color");
         Property pFireTwoColor = cfg.get("color",
-                "fireTwoColor", "" +new Color(255, 0, 51).getRGB(), "Color for fire aspect two, off to not show, global for global color");
+                "fireTwoColor", "" + new Color(255, 0, 51).getRGB(), "Color for fire aspect two, off to not show, global for global color");
         Property pFlameColor = cfg.get("color",
-                "flameColor", "" +new Color(255, 157, 0).getRGB(), "Color for flame on bows, off to not show, global for global color");
+                "flameColor", "" + new Color(255, 157, 0).getRGB(), "Color for flame on bows, off to not show, global for global color");
         Property pInfinityColor = cfg.get("color",
                 "infinityColor", "" + new Color(149, 206, 255).getRGB(), "Color for Infinity, off to not show, global for global color");
         Property pKnockbackColor = cfg.get("color",

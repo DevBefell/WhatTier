@@ -1,6 +1,5 @@
 package me.befell.whattier.Main;
 
-import com.typesafe.config.ConfigException;
 import me.befell.whattier.Utils.Utils;
 import me.befell.whattier.WhatTier;
 import net.minecraft.client.Minecraft;
@@ -10,7 +9,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -23,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 
 public class Events {
@@ -103,10 +102,20 @@ public class Events {
             } catch (Exception ignored1) {
             }
             if (!version.equals(WhatTier.VERSION)) {
+                logger.info(changelog);
                 breakline();
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76There is an update for WhatTier!"));
-                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Your Current version is " + WhatTier.VERSION + " The newest one is " + version));
-                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Changelog: " + changelog));
+                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76Your Current version is  " + WhatTier.VERSION + " The newest one is " + version));
+                mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76 Changelog: "));
+                if (changelog.contains("/n")){
+                    String[] lines = changelog.split("/n");
+                    for (String line : lines){
+                        mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76" + line));
+                    }
+                }else {
+                    mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76" + changelog));
+
+                }
                 mc.thePlayer.addChatMessage(new ChatComponentText("\u00a76\u00a7n\u00a7lClick here to download")
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("https://github.com/PyICoder/WhatTier/releases/latest")))
