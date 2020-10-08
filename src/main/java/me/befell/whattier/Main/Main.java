@@ -295,7 +295,6 @@ public class Main {
 
         int x = (int) ((guiLeft + inventorySlot.xDisplayPosition) / scaleFactor + 1);
         int y = (int) ((guiTop + inventorySlot.yDisplayPosition) / scaleFactor) + 1;
-        System.out.println(color);
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(status, x, y, color);
     }
 }

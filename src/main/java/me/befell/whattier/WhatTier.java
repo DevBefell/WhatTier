@@ -6,7 +6,6 @@ import me.befell.whattier.Gui.GuiMain;
 import me.befell.whattier.Main.Events;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -55,7 +54,6 @@ public class WhatTier {
 
     public void openMenu() {
         this.openMenu = true;
-        logger.info(openMenu);
     }
 
 }

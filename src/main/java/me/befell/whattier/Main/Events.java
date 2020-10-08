@@ -9,10 +9,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -63,15 +61,15 @@ public class Events {
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load e) {
         new Utils().Delay(() -> {
-                if (ShouldRun() && !registed) {
-                    logger.info("Registering");
-                    registed = true;
-                    MinecraftForge.EVENT_BUS.register(new Main(mod));
-                } else if (!ShouldRun() && registed) {
-                    registed = false;
-                    logger.info("Unregistering");
-                    MinecraftForge.EVENT_BUS.unregister(new Main(mod));
-                }
+            if (ShouldRun() && !registed) {
+                logger.info("Registering");
+                registed = true;
+                MinecraftForge.EVENT_BUS.register(new Main(mod));
+            } else if (!ShouldRun() && registed) {
+                registed = false;
+                logger.info("Unregistering");
+                MinecraftForge.EVENT_BUS.unregister(new Main(mod));
+            }
         }, 2);
     }
 
