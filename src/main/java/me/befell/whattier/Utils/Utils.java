@@ -1,7 +1,8 @@
 package me.befell.whattier.Utils;
-import net.minecraft.client.*;
-import org.lwjgl.input.*;
-import net.minecraft.client.gui.*;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
 
 import java.util.Timer;
@@ -9,7 +10,8 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 
 public class Utils {
-    private static Minecraft mc;
+    private static final Minecraft mc;
+
     // https://stackoverflow.com/a/2832629/10565413
     public static final class IntPair {
         private final int first;
@@ -55,6 +57,7 @@ public class Utils {
         }
         return map.get(l) + toRoman(number - l);
     }
+
     public static Point getMousePos() {
         Point scaled = getScaledDimensions();
         int width = scaled.getX();
@@ -79,7 +82,8 @@ public class Utils {
     static {
         mc = Minecraft.getMinecraft();
     }
-    public void Delay(Runnable task, int secs){
+
+    public void Delay(Runnable task, int secs) {
         TimerTask exe = new TimerTask() {
             public void run() {
                 task.run();

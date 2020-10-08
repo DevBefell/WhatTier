@@ -6,6 +6,7 @@ import me.befell.whattier.Gui.GuiMain;
 import me.befell.whattier.Main.Events;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(name = "WhatTier", modid = WhatTier.MODID, version = WhatTier.VERSION, clientSideOnly = true)
 public class WhatTier {
     public static final String MODID = "whattier";
-    public static final String VERSION = "1.5";
+    public static final String VERSION = "1.5.2";
     private final WTConfig config = new WTConfig();
     private boolean openMenu;
     public Logger logger;
@@ -30,9 +31,9 @@ public class WhatTier {
 
     @EventHandler
     public void init(FMLInitializationEvent ignored) {
+        ClientCommandHandler.instance.registerCommand(new WTCommand(this));
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new Events(this));
-        ClientCommandHandler.instance.registerCommand(new WTCommand(this));
         config.syncFromFile();
     }
 

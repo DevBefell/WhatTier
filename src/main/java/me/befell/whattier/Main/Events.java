@@ -10,6 +10,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -60,9 +61,8 @@ public class Events {
     }
 
     @SubscribeEvent
-    public void onJoinWorld(PlayerSetSpawnEvent e) {
+    public void onWorldLoad(WorldEvent.Load e) {
         new Utils().Delay(() -> {
-            if (e.entity.getName().equals(mc.thePlayer.getName())) {
                 if (ShouldRun() && !registed) {
                     logger.info("Registering");
                     registed = true;
@@ -72,14 +72,7 @@ public class Events {
                     logger.info("Unregistering");
                     MinecraftForge.EVENT_BUS.unregister(new Main(mod));
                 }
-            }
         }, 2);
-    }
-
-    @SubscribeEvent
-    public void onLeaveWorld(PlayerEvent.PlayerLoggedOutEvent e) {
-        MinecraftForge.EVENT_BUS.unregister(new Main(mod));
-        logger.info("Left the world unregistering");
     }
 
     static {

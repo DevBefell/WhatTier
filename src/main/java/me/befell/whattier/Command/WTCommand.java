@@ -3,12 +3,14 @@ package me.befell.whattier.Command;
 import me.befell.whattier.WhatTier;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+
 public class WTCommand extends CommandBase {
 
-    private WhatTier mod;
+    private final WhatTier mod;
 
     public WTCommand(WhatTier mod) {
         this.mod = mod;
+        mod.getLogger().info("WhatTier Command Registered.");
     }
 
     @Override
@@ -22,7 +24,7 @@ public class WTCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args){
+    public void processCommand(ICommandSender sender, String[] args) {
         mod.openMenu();
     }
 

@@ -26,7 +26,6 @@ import java.util.Map;
 import static me.befell.whattier.Utils.Utils.toRoman;
 
 public class Main {
-    private final Configuration cfg;
     private final ConfigCategory cfgclient;
     private final ConfigCategory cfgcolor;
     private final static Map<Integer, String> values = new HashMap<>();
@@ -42,7 +41,7 @@ public class Main {
     }
 
     public Main(WhatTier mod) {
-        cfg = mod.getConfig().getConfig();
+        Configuration cfg = mod.getConfig().getConfig();
         cfgclient = cfg.getCategory("client");
         cfgcolor = cfg.getCategory("color");
 
@@ -121,7 +120,7 @@ public class Main {
 
     @SubscribeEvent
     public void onRenderGuiBackground(GuiScreenEvent.DrawScreenEvent.Pre e) {
-        if (e.gui instanceof GuiContainer) {
+        if (e.gui instanceof GuiContainer && cfgclient.get("isEnabled").getString().equals("enabled")) {
             GuiContainer guiContainer = (GuiContainer) e.gui;
             Container inventorySlots = guiContainer.inventorySlots;
             IInventory inventory = inventorySlots.getSlot(0).inventory;
@@ -132,8 +131,8 @@ public class Main {
             Utils.IntPair xy = size(guiContainer, inventory);
             int guiLeft = xy.getFirst();
             int guiTop = xy.getSecond();
-            GlStateManager.pushMatrix();
             float scaleFactor = Float.parseFloat(cfgclient.get("size").getString());
+            GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 260);
             GlStateManager.scale(scaleFactor, scaleFactor, 0);
             for (Slot inventorySlot : inventorySlots.inventorySlots) {
@@ -165,7 +164,6 @@ public class Main {
             }
 
             status = cfgclient.get("isRoman").getString().equals("enabled") ? toRoman(num) : "" + num;
-            ;
 
         } else {
             NBTTagList itemEnchant = item.getEnchantmentTagList();
@@ -297,7 +295,7 @@ public class Main {
 
         int x = (int) ((guiLeft + inventorySlot.xDisplayPosition) / scaleFactor + 1);
         int y = (int) ((guiTop + inventorySlot.yDisplayPosition) / scaleFactor) + 1;
-
+        System.out.println(color);
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(status, x, y, color);
     }
 }
